@@ -4,6 +4,8 @@ const port=3000;
 const Listings=require('./models/listing');
 const mongoose=require('mongoose');
 const path=require('path');
+const methodOverride=require("method-override");
+const Listing = require('./models/listing');
 app.listen(port,()=>{console.log(`Server running on port ${port}`);});
 
 app.get('/',(req,res)=>{
@@ -36,16 +38,57 @@ async function main() {
 //     res.send("Sample listing saved successfully");
 // });
 app.set("view engine","ejs");
-app.set("views",path.join(__dirname,"/views"));
+app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
 //index route
-app.get("/listings",async(req,res)=>{
-    const allListings=await Listings.find({});
-    res.render("index.ejs",{allListings});
+app.get("/listings", async (req, res) => {
+    const allListings = await Listings.find({});
+    res.render("listings/index", { allListings });
 });
-//show route
-app.get("/listings/:id",async(req,res)=>{
-    let {id}=req.params;
-const listing=await Listings.findById(id);
-res.render("show.ejs",{listing});
+
+
+// NEW ROUTE
+app.get("/listings/new", (req, res) => {
+    res.render("listings/new");
+});
+
+
+// SHOW ROUTE
+app.get("/listings/:id", async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listings.findById(id);
+    res.render("listings/show", { listing });
+});
+
+
+//create route
+app.post("/listings", async (req, res) => {
+    try {
+        const newListing = new Listing(req.body.listing);
+        await newListing.save();
+        res.redirect("/listings");
+    } catch (err) {
+        console.log(err);
+        res.send("Error creating listing");
+    }
+});
+//edit route
+app.get("/listings/:id/edit", async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/edit", { listing });
+});
+//update route
+app.put("/listings/:id",async(req,res)=>{
+let {id}=req.params;
+await Listing.findByIdAndUpdate(id,{...req.body.listing});
+res.redirect("/listings");
+});
+//delete route
+app.delete("/listings/:id",async(req,res)=>{
+let {id}=req.params;
+let deletedlisting=await Listing.findByIdAndDelete(id);
+console.log(deletedlisting);
+res.redirect("/listings");
 });
