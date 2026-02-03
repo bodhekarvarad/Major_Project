@@ -9,3 +9,34 @@
 .nav-link{
     color: #222222 !important;
 }
+/* Footer Styles */
+.f-info-links{
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover{
+    text-decoration: underline;
+    
+}
+.f-info{
+    text-align: center;
+    height: 8rem;
+    display: flex;
+    background-color:#ebebeb ;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space-evenly;
+}
+.f-info-links,.f-info-socials,.f-info-brand{
+    width: 100%;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.f-info-socials i{
+    margin-right: 1rem;
+     font-size: 1.2rem;
+}
