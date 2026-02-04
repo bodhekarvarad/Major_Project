@@ -11,7 +11,7 @@ const ejsMate=require('ejs-mate');
 
 
 app.listen(port,()=>{console.log(`Server running on port ${port}`);});
-
+//home_page
 app.get('/',(req,res)=>{
     res.send('I am route');
 });
@@ -41,6 +41,8 @@ async function main() {
 //   console.log("Sample listing saved successfully");
 //     res.send("Sample listing saved successfully");
 // });
+
+//middleware
 app.use(express.static(path.join(__dirname,"public")));
 app.engine("ejs",ejsMate);
 app.set("view engine","ejs");
