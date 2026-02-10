@@ -72,14 +72,12 @@ app.get("/listings/:id", async (req, res) => {
 
 //create route
 app.post("/listings", async (req, res) => {
-    try {
+       
+        console.log(req.body);
         const newListing = new Listing(req.body.listing);
         await newListing.save();
         res.redirect("/listings");
-    } catch (err) {
-        console.log(err);
-        res.send("Error creating listing");
-    }
+    
 });
 //edit route
 app.get("/listings/:id/edit", async (req, res) => {
