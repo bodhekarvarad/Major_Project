@@ -7,9 +7,9 @@ const path=require('path');
 const methodOverride=require("method-override");
 const Listing = require('./models/listing');
 const ejsMate=require('ejs-mate');
+const flash = require("connect-flash");
 
-
-
+app.use(flash());
 app.listen(port,()=>{console.log(`Server running on port ${port}`);});
 //home_page
 app.get('/',(req,res)=>{
@@ -72,12 +72,17 @@ app.get("/listings/:id", async (req, res) => {
 
 //create route
 app.post("/listings", async (req, res) => {
-       
-        console.log(req.body);
-        const newListing = new Listing(req.body.listing);
-        await newListing.save();
-        res.redirect("/listings");
-    
+ try {
+    const newListing = new Listing(req.body.listing);
+    await newListing.save();
+
+    req.flash("success", "New listing created!");
+    res.redirect("/listings");
+
+  } catch (err) {
+    req.flash("error", err.message);   //  update here
+    res.redirect("/listings/new");     //  redirect like lecture
+  }
 });
 //edit route
 app.get("/listings/:id/edit", async (req, res) => {
